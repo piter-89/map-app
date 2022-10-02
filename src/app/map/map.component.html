@@ -1,0 +1,9 @@
+<div class="map-container">
+  <div class="map-frame">
+    <div #mapRef id="map"></div>
+    <div class="sidebar">
+      <app-filtration></app-filtration>
+    </div>
+  </div>
+</div>
+<div>{{hexagons$ | async}}</div>
