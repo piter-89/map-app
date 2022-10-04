@@ -13,6 +13,10 @@ export class FiltrationServicesService {
     return lastValueFrom( this.http.get('http://localhost:3010/unique-tags-values') );
   }
 
+  reduceEmptyValuesInObj (obj): any {
+    return Object.fromEntries(Object.entries(obj).filter(( [n, v] ) => v));
+  }
+
   async getUniqueTagsValues () {
     const { res: tagsValues } = await this.getTags();
 	

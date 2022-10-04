@@ -41,8 +41,6 @@ export class MapComponent implements AfterViewInit {
 
   constructor(private http: HttpClient, private mapService: MapServiceService, private store: Store) { }
 
-  
-
   async ngAfterViewInit(): Promise<any> {
 		
     this.initMap();
@@ -64,6 +62,12 @@ export class MapComponent implements AfterViewInit {
     const reqPost = this.http.post('http://localhost:3010/hexagons', {"resolution":3,"diagonalBoxPX":1075.107436491814,"mapBounds":{"_southWest":{"lat":45.259422036351694,"lng":13.524169921875002},"_northEast":{"lat":48.879167148960214,"lng":24.071044921875004},"_southEast":{"lat":45.259422036351694,"lng":24.071044921875004},"_northWest":{"lat":48.879167148960214,"lng":13.524169921875002}},"filtrationData":null}).subscribe(data => {``
       console.log(data);
     })
+  }
+
+  setFiltrationData (data) {
+    console.log('EVENT', data);
+    this.filtrationData = data;
+    this.drawElements();
   }
 
   runMap () {
