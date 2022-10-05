@@ -1,27 +1,32 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FiltrationServicesService } from '../utils/filtration-services.service';
+import { FormData, Selects } from './filtration';
 
 @Component({
   selector: 'app-filtration',
   templateUrl: './filtration.component.html',
-  styleUrls: ['./filtration.component.scss']
+  styleUrls: ['./filtration.component.scss'],
 })
 export class FiltrationComponent implements OnInit {
-
-  private selectsData;
-
   public filtrationForm!: FormGroup;
-  public selectManufactures = [];
-  public selectModel = [];
-  public selectOperator = [];
+  public selectManufactures: Array<string> = [];
+  public selectModel: Array<string> = [];
+  public selectOperator: Array<string> = [];
 
-  @ViewChild('formRef') formContainer: any;
-  @Output() submitFormEv = new EventEmitter();
+  @Output() submitFormEv = new EventEmitter<FormData>();
 
-  constructor(private fb: FormBuilder, private filtrationService: FiltrationServicesService) { }
+  constructor(
+    private fb: FormBuilder,
+    private filtrationService: FiltrationServicesService
+  ) {}
 
-  async setFormData () {
+  async setFormData() {
     this.filtrationForm = this.fb.group({
       selectManufacturer: [''],
       selectModel: [''],
@@ -34,32 +39,31 @@ export class FiltrationComponent implements OnInit {
       rotorDiameterTo: [''],
       startDateFrom: [''],
       startDateTo: [''],
-      description: ['']
+      description: [''],
     });
 
-    const tagsValues = await this.filtrationService.getUniqueTagsValues();
+    const tagsValues: Selects = await this.filtrationService.getUniqueTagsValues();
 
     this.selectManufactures = tagsValues.manufactures;
     this.selectModel = tagsValues.model;
     this.selectOperator = tagsValues.operator;
-
-    this.selectsData = await this.filtrationService.getUniqueTagsValues();
   }
 
   ngOnInit(): void {
     this.setFormData();
   }
 
-  saveFilters () {
-    const formPureData = this.filtrationForm?.value;
-    const formData = this.filtrationService.reduceEmptyValuesInObj(formPureData);
+  saveFilters() {
+    const formPureData: FormData = this.filtrationForm?.value;
+    const formData: FormData =
+      this.filtrationService.reduceEmptyValuesInObj(formPureData);
+
     console.log('FILTERS DATA', formData);
     this.submitFormEv.emit(formData);
   }
 
-  clearFilters () {
-    this.formContainer.nativeElement.reset();
-    this.submitFormEv.emit(null);
+  clearFilters() {
+    this.filtrationForm.reset();
+    this.submitFormEv.emit({});
   }
-
 }
