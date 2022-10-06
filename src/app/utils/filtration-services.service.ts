@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { last, lastValueFrom } from 'rxjs';
-import { FormData, Selects, TagValue } from '../filtration/filtration';
+import { Filters, Selects, TagValue } from '../shared/types/filtration';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class FiltrationServicesService {
     return lastValueFrom( this.http.get('http://localhost:3010/unique-tags-values') );
   }
 
-  reduceEmptyValuesInObj (obj: FormData): FormData {
+  reduceEmptyValuesInObj (obj: Filters): Filters {
     return Object.fromEntries(Object.entries(obj).filter(( [n, v] ) => v));
   }
 

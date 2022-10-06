@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FiltrationServicesService } from '../utils/filtration-services.service';
-import { FormData, Selects } from './filtration';
+import { Filters, Selects } from '../shared/types/filtration';
 
 @Component({
   selector: 'app-filtration',
@@ -19,7 +19,7 @@ export class FiltrationComponent implements OnInit {
   public selectModel: Array<string> = [];
   public selectOperator: Array<string> = [];
 
-  @Output() submitFormEv = new EventEmitter<FormData>();
+  @Output() submitFormEv = new EventEmitter<Filters>();
 
   constructor(
     private fb: FormBuilder,
@@ -54,8 +54,8 @@ export class FiltrationComponent implements OnInit {
   }
 
   saveFilters() {
-    const formPureData: FormData = this.filtrationForm?.value;
-    const formData: FormData =
+    const formPureData: Filters = this.filtrationForm?.value;
+    const formData: Filters =
       this.filtrationService.reduceEmptyValuesInObj(formPureData);
 
     console.log('FILTERS DATA', formData);

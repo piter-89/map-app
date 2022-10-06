@@ -8,7 +8,8 @@ import { addHexagons } from '../state/hexagons.actions';
 import { addLayer, removeLayers, addPOIs, removePOIs } from '../state/map.actions';
 import { selectHexagons } from '../state/hexagons.selectors';
 import { selectLayers, selectPOIs } from '../state/map.selectors';
-import { FormData } from '../filtration/filtration';
+import { Filters } from '../shared/types/filtration';
+import { Poi } from '../shared/types/map';
 
 @Component({
   selector: 'app-map',
@@ -20,7 +21,7 @@ export class MapComponent implements AfterViewInit {
 
   private MAP: L.Map;
   private mapLayers: Array<L.Layer> = [];
-  private filtrationData: FormData;
+  private filtrationData: Filters;
   private maxH3Resolution = 7;
 	private minH3Resolution = 3;
   private zoomTreshold = 12;
@@ -47,7 +48,7 @@ export class MapComponent implements AfterViewInit {
     this.runMap();
   }
 
-  setFiltrationData (data: FormData) {
+  setFiltrationData (data: Filters) {
     console.log('EVENT', data);
     this.filtrationData = data;
     this.drawElements();
@@ -79,8 +80,8 @@ export class MapComponent implements AfterViewInit {
 
   async drawPOIsByMap () {
     const { diagonalBoxPX, mapBounds } = this.mapService.getMapParams(this.mapContainer, this.zoomCurrent, this.MAP);
-    const { res: POIsNew } = await this.mapService.getPOIs(diagonalBoxPX, mapBounds, this.filtrationData);
-    
+    const POIsNew: Poi[] = await this.mapService.getPOIs(diagonalBoxPX, mapBounds, this.filtrationData);
+
     this.store.dispatch(addPOIs({ POIs: POIsNew }));
     this.clearMap();
 

@@ -1,4 +1,4 @@
-export type FormData = {
+export type Filters = {
   selectManufacturer?: string,
   selectModel?: string,
   selectOperator?: string,
