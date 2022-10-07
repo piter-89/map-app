@@ -9,7 +9,7 @@ import { addLayer, removeLayers, addPOIs, removePOIs } from '../state/map.action
 import { selectHexagons } from '../state/hexagons.selectors';
 import { selectLayers, selectPOIs } from '../state/map.selectors';
 import { Filters } from '../shared/types/filtration';
-import { Poi } from '../shared/types/map';
+import { Hexagon, Poi, PoisTag } from '../shared/types/map';
 
 @Component({
   selector: 'app-map',
@@ -80,12 +80,12 @@ export class MapComponent implements AfterViewInit {
 
   async drawPOIsByMap () {
     const { diagonalBoxPX, mapBounds } = this.mapService.getMapParams(this.mapContainer, this.zoomCurrent, this.MAP);
-    const POIsNew: Poi[] = await this.mapService.getPOIs(diagonalBoxPX, mapBounds, this.filtrationData);
+    const POIsNew: Array<Poi> = await this.mapService.getPOIs(diagonalBoxPX, mapBounds, this.filtrationData);
 
     this.store.dispatch(addPOIs({ POIs: POIsNew }));
     this.clearMap();
 
-    const POIS: any = await lastValueFrom(this.store.select(selectPOIs).pipe(take(1)));
+    const POIS: Array<Poi> = await lastValueFrom(this.store.select(selectPOIs).pipe(take(1)));
 
     POIS.forEach( poi => {
       const marker = this.drawPOI(poi);
@@ -93,12 +93,12 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  async drawPOIsByHexagon (hexIndex) {
-    const { res: POIsNew } = await this.mapService.getPOIsByHexagon(hexIndex, this.filtrationData);
+  async drawPOIsByHexagon (hexIndex: string) {
+    const POIsNew: Array<Poi> = await this.mapService.getPOIsByHexagon(hexIndex, this.filtrationData);
     
     this.store.dispatch(addPOIs({ POIs: POIsNew}));
 
-    const POIS: any = await lastValueFrom(this.store.select(selectPOIs).pipe(take(1)));
+    const POIS: Array<Poi> = await lastValueFrom(this.store.select(selectPOIs).pipe(take(1)));
 
     POIS.forEach( poi => {
       const marker = this.drawPOI(poi);
@@ -106,7 +106,7 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  drawPOI (item) {
+  drawPOI (item: Poi) {
     let windPowerIcon = L.icon({
       iconUrl: '/assets/windmill.png',
       iconSize: [22, 28]
@@ -121,9 +121,9 @@ export class MapComponent implements AfterViewInit {
     marker.bindPopup('<b>Loading...</b>');
     
     marker.on('mouseover', async (event) => {
-      const popup = event.target.getPopup();
-      const { res: tags } = await this.mapService.getPOIsTags(item.id);
-      const newContent = tags.reduce((acc, value) => {
+      const popup: L.Popup = event.target.getPopup();
+      const tags: Array<PoisTag> = await this.mapService.getPOIsTags(item.id);
+      const newContent: string = tags.reduce((acc, value) => {
         return acc += `<strong>${value.name}</strong>: ${value.value}<br>`;
       }, '');
       
@@ -131,6 +131,7 @@ export class MapComponent implements AfterViewInit {
       popup.update();
       event.target.openPopup();
     });
+    
     marker.on('mouseout', function (event) {
       event.target.closePopup();
     });
@@ -140,7 +141,7 @@ export class MapComponent implements AfterViewInit {
 
   async drawHexagons () {
     let { diagonalBoxPX, mapBounds, hexResolution } = this.mapService.getMapParams(this.mapContainer, this.zoomCurrent, this.MAP);
-		const { res: hexagonsNew } = await this.mapService.getHexagons(hexResolution, diagonalBoxPX, mapBounds, this.filtrationData);
+		const hexagonsNew: Array<Hexagon> = await this.mapService.getHexagons(hexResolution, diagonalBoxPX, mapBounds, this.filtrationData);
     
     // TUTAJ TO WSZYSTKO PRZEOBIC - ZMIANA HEXAGONOW W STORZE POWINNA BYC NA SUBSCRIEBE I TO CO PONIZEJ W FILTER POWINNO DZIAC SIE AUTOMATYCZNIE PO UPDATCIE W STORZE - TJ REACTYWNIE
 
@@ -152,7 +153,7 @@ export class MapComponent implements AfterViewInit {
     hexResolution = hexResolution < this.minH3Resolution ? this.minH3Resolution : hexResolution; // gdy oddala sie zoom to hexagony zostaja na minimalnej rozdzielczosci = 3
     hexResolution = hexResolution > this.maxH3Resolution ? this.maxH3Resolution : hexResolution; // gdy przybliza sie zoom to hexagony zostaja na maksymalnej rozdzielczosci = 7
 
-    const HEXAGONS: any = await lastValueFrom(this.hexagons$.pipe(take(1)));
+    const HEXAGONS: Array<Hexagon> = await lastValueFrom(this.hexagons$.pipe(take(1)));
 
     HEXAGONS.filter( hex => hex.resolution === hexResolution).forEach( hex => {
       if (hex.pois_count === 1) {

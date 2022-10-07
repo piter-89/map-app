@@ -1,7 +1,7 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { MapBoundries, Poi } from '../shared/types/map';
+import { Hexagon, MapBoundries, Poi, PoisTag } from '../shared/types/map';
 import { Filters } from '../shared/types/filtration';
 
 @Injectable({
@@ -10,44 +10,59 @@ import { Filters } from '../shared/types/filtration';
 export class MapServiceService {
   constructor(private http: HttpClient) {}
 
-  postData(data): any {
-    return lastValueFrom(this.http.post('http://localhost:3010/pois', data));
+  postData(url: string, data): any {
+    return lastValueFrom(this.http.post(url, data));
   }
 
-  getHexagons(resolution, diagonalBoxPX, mapBounds, filtrationData): any {
-    return lastValueFrom(
-      this.http.post('http://localhost:3010/hexagons', {
+  getData(url: string): any {
+    return lastValueFrom(this.http.get(url));
+  }
+
+  async getHexagons(
+    resolution: number,
+    diagonalBoxPX: number,
+    mapBounds: MapBoundries,
+    filtrationData: Filters
+  ): Promise<Array<Hexagon>> {
+    const hexagons: Array<Hexagon> = await this.postData(
+      'http://localhost:3010/hexagons',
+      {
         resolution,
         diagonalBoxPX,
         mapBounds,
         filtrationData,
-      })
+      }
     );
+
+    return hexagons;
   }
 
-  getPOIsByHexagon(hexIndex, filtrationData): any {
-    return lastValueFrom(
-      this.http.post('http://localhost:3010/poi', {
-        hexIndex,
-        filtrationData,
-      })
+  async getPOIsByHexagon(
+    hexIndex: string,
+    filtrationData: Filters
+  ): Promise<Array<Poi>> {
+    const POIs: Array<Poi> = await this.postData('http://localhost:3010/poi', {
+      hexIndex,
+      filtrationData,
+    });
+
+    return POIs;
+  }
+
+  async getPOIsTags(poiId: string): Promise<Array<PoisTag>> {
+    const poisTags: Array<PoisTag> = await this.getData(
+      `http://localhost:3010/tags/${poiId}`
     );
+
+    return poisTags;
   }
 
-  getPOIsTags(poiId): any {
-    return lastValueFrom(this.http.get(`http://localhost:3010/tags/${poiId}`));
-  }
-
-  // getPOIs (diagonalBoxPX, mapBounds, filtrationData): any {
-  //   return lastValueFrom( this.http.post('http://localhost:3010/pois', {
-  //     diagonalBoxPX,
-  //     mapBounds,
-  //     filtrationData
-  //   }) );
-  // }
-
-  async getPOIs(diagonalBoxPX: number, mapBounds: MapBoundries, filtrationData: Filters): Promise<Array<Poi>> {
-    const POIS: Array<Poi> = await this.postData({
+  async getPOIs(
+    diagonalBoxPX: number,
+    mapBounds: MapBoundries,
+    filtrationData: Filters
+  ): Promise<Array<Poi>> {
+    const POIS: Array<Poi> = await this.postData('http://localhost:3010/pois', {
       diagonalBoxPX,
       mapBounds,
       filtrationData,
