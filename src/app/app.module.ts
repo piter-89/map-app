@@ -10,12 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { FiltrationComponent } from './filtration/filtration.component';
+import { TestcompComponent } from './testcomp/testcomp.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    FiltrationComponent
+    FiltrationComponent,
+    TestcompComponent
   ],
   imports: [
     BrowserModule,

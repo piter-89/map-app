@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import { lastValueFrom, take } from 'rxjs';
 import { MapServiceService } from '../utils/map-service.service';
@@ -31,7 +30,7 @@ export class MapComponent implements AfterViewInit {
   hexagons$ = this.store.select(selectHexagons);
   POIs$ = this.store.select(selectPOIs);
 
-  constructor(private http: HttpClient, private mapService: MapServiceService, private store: Store) { }
+  constructor(private mapService: MapServiceService, private store: Store) { }
 
   private initMap () {
     const zoomStart = 7;
@@ -43,7 +42,8 @@ export class MapComponent implements AfterViewInit {
 		}).addTo(this.MAP);
   }
 
-  async ngAfterViewInit() {
+  ngAfterViewInit() {
+    console.log('TEEEEEEEST');
     this.initMap();
     this.runMap();
   }
@@ -55,6 +55,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   runMap () {
+    console.log('TEEEEEEEST0');
     this.drawElements();
 
     this.MAP.on('zoom, moveend', (event) => {
@@ -65,9 +66,11 @@ export class MapComponent implements AfterViewInit {
   }
 
   async drawElements (isHexWithSinglePOI?: boolean) {
+    console.log('TEEEEEEEST1', this.zoomCurrent, this.zoomTreshold);
     if(this.zoomCurrent >= this.zoomTreshold || isHexWithSinglePOI) { // duzy zoom - wyswietla wszystkie POI
       this.drawPOIsByMap();
     } else {
+      console.log('ELOOOOOOOOOOOOO');
       this.drawHexagons();
     }
   }
@@ -140,9 +143,10 @@ export class MapComponent implements AfterViewInit {
   }
 
   async drawHexagons () {
+    console.log('TEEEEEEEST2', this.mapService.getMapParams);
     let { diagonalBoxPX, mapBounds, hexResolution } = this.mapService.getMapParams(this.mapContainer, this.zoomCurrent, this.MAP);
 		const hexagonsNew: Array<Hexagon> = await this.mapService.getHexagons(hexResolution, diagonalBoxPX, mapBounds, this.filtrationData);
-    
+    //console.log('hexagonsNew', hexagonsNew);
     // TUTAJ TO WSZYSTKO PRZEOBIC - ZMIANA HEXAGONOW W STORZE POWINNA BYC NA SUBSCRIEBE I TO CO PONIZEJ W FILTER POWINNO DZIAC SIE AUTOMATYCZNIE PO UPDATCIE W STORZE - TJ REACTYWNIE
 
     this.store.dispatch(addHexagons({ hexagons: hexagonsNew }));
@@ -164,7 +168,7 @@ export class MapComponent implements AfterViewInit {
           html: '<span>' + hex.pois_count + '</span>'
         });
         
-        const polygon = L.polygon(hex.nodes).addTo(this.MAP);
+        const polygon = L.polygon(hex.nodes).setStyle({className: 'hexagon'}).addTo(this.MAP);
         const marker = L.marker(hex.centertxt, { icon: hexCenterIcon }).addTo(this.MAP);
         this.mapLayers.push(polygon);
         this.mapLayers.push(marker);

@@ -4,7 +4,7 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { FiltrationServicesService } from '../utils/filtration-services.service';
 import { Filters, Selects } from '../shared/types/filtration';
 
@@ -14,10 +14,23 @@ import { Filters, Selects } from '../shared/types/filtration';
   styleUrls: ['./filtration.component.scss'],
 })
 export class FiltrationComponent implements OnInit {
-  public filtrationForm!: FormGroup;
   public selectManufactures: Array<string> = [];
   public selectModel: Array<string> = [];
   public selectOperator: Array<string> = [];
+  public filtrationForm: FormGroup = this.fb.group({
+    selectManufacturer: [''],
+    selectModel: [''],
+    selectOperator: [''],
+    electricityOutputFrom: [''],
+    electricityOutputTo: [''],
+    heightFrom: [''],
+    heightTo: [''],
+    rotorDiameterFrom: [''],
+    rotorDiameterTo: [''],
+    startDateFrom: [''],
+    startDateTo: [''],
+    description: [''],
+  });
 
   @Output() submitFormEv = new EventEmitter<Filters>();
 
@@ -27,21 +40,6 @@ export class FiltrationComponent implements OnInit {
   ) {}
 
   async setFormData() {
-    this.filtrationForm = this.fb.group({
-      selectManufacturer: [''],
-      selectModel: [''],
-      selectOperator: [''],
-      electricityOutputFrom: [''],
-      electricityOutputTo: [''],
-      heightFrom: [''],
-      heightTo: [''],
-      rotorDiameterFrom: [''],
-      rotorDiameterTo: [''],
-      startDateFrom: [''],
-      startDateTo: [''],
-      description: [''],
-    });
-
     const tagsValues: Selects = await this.filtrationService.getUniqueTagsValues();
 
     this.selectManufactures = tagsValues.manufactures;
@@ -54,7 +52,7 @@ export class FiltrationComponent implements OnInit {
   }
 
   saveFilters() {
-    const formPureData: Filters = this.filtrationForm?.value;
+    const formPureData: any = this.filtrationForm?.value;
     const formData: Filters =
       this.filtrationService.reduceEmptyValuesInObj(formPureData);
 

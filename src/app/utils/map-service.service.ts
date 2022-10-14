@@ -72,6 +72,7 @@ export class MapServiceService {
   }
 
   getMapParams(mapContainer: ElementRef, zoomCurrent: number, MAP: L.Map) {
+    console.log('getMapParams');
     return {
       diagonalBoxPX: this.calcDiagonalPXAndMapBounds(mapContainer),
       mapBounds: this.prepareMapCorners(MAP),
