@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
 import { TestcompComponent } from './testcomp.component';
 import { TestService } from '../utils/test.service';
@@ -74,4 +74,19 @@ describe('TestcompComponent', () => {
       .withContext('getTags called')
       .toBe(true);
   });
+
+  it('should say hello', waitForAsync(() => {
+    fixture.detectChanges();
+
+    expect(hostElement.querySelector('.ext-content h1')).not.toBeTruthy();
+
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      
+      expect(hostElement.querySelector('.ext-content h1')).toBeTruthy();
+      //expect(hostElement.querySelector('.ext-content h1')?.textContent).toContain('HEEELOOOO');
+    });
+
+  }));
+
 });

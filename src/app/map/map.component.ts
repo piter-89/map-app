@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
-import { lastValueFrom, take } from 'rxjs';
+import { lastValueFrom, Observable, take } from 'rxjs';
 import { MapServiceService } from '../utils/map-service.service';
 import { Store, select } from '@ngrx/store';
 import { addHexagons } from '../state/hexagons.actions';
@@ -9,6 +9,7 @@ import { selectHexagons } from '../state/hexagons.selectors';
 import { selectLayers, selectPOIs } from '../state/map.selectors';
 import { Filters } from '../shared/types/filtration';
 import { Hexagon, Poi, PoisTag } from '../shared/types/map';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-map',
@@ -20,6 +21,7 @@ export class MapComponent implements AfterViewInit {
 
   private MAP: L.Map;
   private mapLayers: Array<L.Layer> = [];
+  private layersUnderDrawing: Array<number> = [];
   private filtrationData: Filters;
   private maxH3Resolution = 7;
 	private minH3Resolution = 3;
@@ -43,34 +45,33 @@ export class MapComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log('TEEEEEEEST');
     this.initMap();
     this.runMap();
   }
 
   setFiltrationData (data: Filters) {
-    console.log('EVENT', data);
     this.filtrationData = data;
     this.drawElements();
   }
 
   runMap () {
-    console.log('TEEEEEEEST0');
     this.drawElements();
 
     this.MAP.on('zoom, moveend', (event) => {
-      console.log("ZOOM EVENT START");
       this.zoomCurrent = event.target._zoom;
       this.drawElements();
     });
+
+    this.MAP.on('layeradd', (evt) => {
+      this.mapLayers;
+      // console.log(evt.target);
+    });
   }
 
-  async drawElements (isHexWithSinglePOI?: boolean) {
-    console.log('TEEEEEEEST1', this.zoomCurrent, this.zoomTreshold);
+  drawElements (isHexWithSinglePOI?: boolean) {
     if(this.zoomCurrent >= this.zoomTreshold || isHexWithSinglePOI) { // duzy zoom - wyswietla wszystkie POI
       this.drawPOIsByMap();
     } else {
-      console.log('ELOOOOOOOOOOOOO');
       this.drawHexagons();
     }
   }
@@ -84,7 +85,7 @@ export class MapComponent implements AfterViewInit {
   async drawPOIsByMap () {
     const { diagonalBoxPX, mapBounds } = this.mapService.getMapParams(this.mapContainer, this.zoomCurrent, this.MAP);
     const POIsNew: Array<Poi> = await this.mapService.getPOIs(diagonalBoxPX, mapBounds, this.filtrationData);
-
+    
     this.store.dispatch(addPOIs({ POIs: POIsNew }));
     this.clearMap();
 
@@ -98,7 +99,6 @@ export class MapComponent implements AfterViewInit {
 
   async drawPOIsByHexagon (hexIndex: string) {
     const POIsNew: Array<Poi> = await this.mapService.getPOIsByHexagon(hexIndex, this.filtrationData);
-    
     this.store.dispatch(addPOIs({ POIs: POIsNew}));
 
     const POIS: Array<Poi> = await lastValueFrom(this.store.select(selectPOIs).pipe(take(1)));
@@ -143,10 +143,9 @@ export class MapComponent implements AfterViewInit {
   }
 
   async drawHexagons () {
-    console.log('TEEEEEEEST2', this.mapService.getMapParams);
     let { diagonalBoxPX, mapBounds, hexResolution } = this.mapService.getMapParams(this.mapContainer, this.zoomCurrent, this.MAP);
 		const hexagonsNew: Array<Hexagon> = await this.mapService.getHexagons(hexResolution, diagonalBoxPX, mapBounds, this.filtrationData);
-    //console.log('hexagonsNew', hexagonsNew);
+
     // TUTAJ TO WSZYSTKO PRZEOBIC - ZMIANA HEXAGONOW W STORZE POWINNA BYC NA SUBSCRIEBE I TO CO PONIZEJ W FILTER POWINNO DZIAC SIE AUTOMATYCZNIE PO UPDATCIE W STORZE - TJ REACTYWNIE
 
     this.store.dispatch(addHexagons({ hexagons: hexagonsNew }));
@@ -157,8 +156,9 @@ export class MapComponent implements AfterViewInit {
     hexResolution = hexResolution < this.minH3Resolution ? this.minH3Resolution : hexResolution; // gdy oddala sie zoom to hexagony zostaja na minimalnej rozdzielczosci = 3
     hexResolution = hexResolution > this.maxH3Resolution ? this.maxH3Resolution : hexResolution; // gdy przybliza sie zoom to hexagony zostaja na maksymalnej rozdzielczosci = 7
 
-    const HEXAGONS: Array<Hexagon> = await lastValueFrom(this.hexagons$.pipe(take(1)));
-
+    // const HEXAGONS: Array<Hexagon> = await lastValueFrom(this.hexagons$.pipe(take(1))); to trzeba opakowac inną metodą i ją też zmockować aby test działał!
+    const HEXAGONS: Array<Hexagon> = hexagonsNew;
+    
     HEXAGONS.filter( hex => hex.resolution === hexResolution).forEach( hex => {
       if (hex.pois_count === 1) {
         this.drawPOIsByHexagon(hex.hex_index);
@@ -168,12 +168,14 @@ export class MapComponent implements AfterViewInit {
           html: '<span>' + hex.pois_count + '</span>'
         });
         
-        const polygon = L.polygon(hex.nodes).setStyle({className: 'hexagon'}).addTo(this.MAP);
+        const polygon: any = L.polygon(hex.nodes, { className: 'hexagon' }).addTo(this.MAP);
         const marker = L.marker(hex.centertxt, { icon: hexCenterIcon }).addTo(this.MAP);
+        
         this.mapLayers.push(polygon);
         this.mapLayers.push(marker);
       }
     });
+    console.log('HEXAGONS ADDED');
   };
 
 }
