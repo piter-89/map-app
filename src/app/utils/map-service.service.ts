@@ -1,6 +1,8 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, take } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectHexagons } from '../state/hexagons.selectors';
 import { Hexagon, MapBoundries, Poi, PoisTag } from '../shared/types/map';
 import { Filters } from '../shared/types/filtration';
 
@@ -8,7 +10,7 @@ import { Filters } from '../shared/types/filtration';
   providedIn: 'root',
 })
 export class MapServiceService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private store: Store) {}
 
   postData(url: string, data): any {
     return lastValueFrom(this.http.post(url, data));
@@ -16,6 +18,12 @@ export class MapServiceService {
 
   getData(url: string): any {
     return lastValueFrom(this.http.get(url));
+  }
+
+  async getHexagonsFromStore (): Promise<Array<Hexagon>> {
+    const hexagons$ = this.store.select(selectHexagons);
+    const hexagons: Array<Hexagon> = await lastValueFrom(hexagons$.pipe(take(1)));
+    return hexagons;
   }
 
   async getHexagons(

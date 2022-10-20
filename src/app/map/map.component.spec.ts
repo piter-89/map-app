@@ -22,15 +22,17 @@ describe('MapComponent', () => {
   let fixture: ComponentFixture<MapComponent>;
   let hostElement: HTMLElement;
   let getHexagonsSpy: jasmine.Spy;
+  let getHexagonsFromStoreSpy: jasmine.Spy;
   let getMapParamsSpy: jasmine.Spy;
-  let getPOIsByHexagon: jasmine.Spy;
+  let getPOIsByHexagonSpy: jasmine.Spy;
 
   beforeEach(async () => {
 
-    const mapServiceService = jasmine.createSpyObj('MapServiceService', ['getHexagons', 'getMapParams', 'getPOIsByHexagon']);
+    const mapServiceService = jasmine.createSpyObj('MapServiceService', ['getHexagons', 'getHexagonsFromStore', 'getMapParams', 'getPOIsByHexagon']);
     getHexagonsSpy = mapServiceService.getHexagons.and.returnValue(JSON.parse(getHexagonsMockData));
     getMapParamsSpy = mapServiceService.getMapParams.and.returnValue(getMapParamsMockData);
-    getPOIsByHexagon = mapServiceService.getPOIsByHexagon.and.returnValue(getPOIsByHexagonMockData);
+    getPOIsByHexagonSpy = mapServiceService.getPOIsByHexagon.and.returnValue(getPOIsByHexagonMockData);
+    getHexagonsFromStoreSpy = mapServiceService.getHexagonsFromStore.and.returnValue(JSON.parse(getHexagonsMockData));
     
     await TestBed.configureTestingModule({
       declarations: [ MapComponent, MockFiltrationComponent, MockTestComponent ],
@@ -62,20 +64,20 @@ describe('MapComponent', () => {
     expect(hostElement.querySelector('.leaflet-map-pane')).toBeTruthy();
   });
   
-  it('should load some hexagons', () => {
+  it('should load some hexagons', waitForAsync(() => {
     fixture.detectChanges();
 
-    expect(hostElement.querySelector('.hexagon')).toBeTruthy();
+    expect(hostElement.querySelector('.hexagon')).not.toBeTruthy();
 
-    // fixture.whenStable().then(() => {
-    //   fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
       
-    //   expect(hostElement.querySelector('.hexagon')).toBeTruthy();
+      expect(hostElement.querySelector('.hexagon')).toBeTruthy();
       
-    //   //expect(hostElement.querySelector('.ext-content h1')?.textContent).toContain('HEEELOOOO');
-    // });
+      //expect(hostElement.querySelector('.ext-content h1')?.textContent).not.toContain('HEEELOOOO');
+    });
 
-  });
+  }));
 
   // it('each hexagon should have center icon', () => {
   //   const hexagonsAll = hostElement.querySelectorAll('.hexagon');

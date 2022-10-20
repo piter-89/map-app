@@ -156,8 +156,8 @@ export class MapComponent implements AfterViewInit {
     hexResolution = hexResolution < this.minH3Resolution ? this.minH3Resolution : hexResolution; // gdy oddala sie zoom to hexagony zostaja na minimalnej rozdzielczosci = 3
     hexResolution = hexResolution > this.maxH3Resolution ? this.maxH3Resolution : hexResolution; // gdy przybliza sie zoom to hexagony zostaja na maksymalnej rozdzielczosci = 7
 
-    // const HEXAGONS: Array<Hexagon> = await lastValueFrom(this.hexagons$.pipe(take(1))); to trzeba opakowac inną metodą i ją też zmockować aby test działał!
-    const HEXAGONS: Array<Hexagon> = hexagonsNew;
+    const HEXAGONS: Array<Hexagon> = await this.mapService.getHexagonsFromStore();
+    // console.log('HEXAGONS', HEXAGONS.length);
     
     HEXAGONS.filter( hex => hex.resolution === hexResolution).forEach( hex => {
       if (hex.pois_count === 1) {
@@ -175,7 +175,7 @@ export class MapComponent implements AfterViewInit {
         this.mapLayers.push(marker);
       }
     });
-    console.log('HEXAGONS ADDED');
+    // console.log('HEXAGONS ADDED');
   };
 
 }
