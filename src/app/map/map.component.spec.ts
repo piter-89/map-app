@@ -79,25 +79,42 @@ describe('MapComponent', () => {
 
   }));
 
-  // it('each hexagon should have center icon', () => {
-  //   const hexagonsAll = hostElement.querySelectorAll('.hexagon');
-  //   const hexCenterIconsAll = hostElement.querySelectorAll('.hex-center-icon');
+  it('each hexagon should have center icon', waitForAsync(() => {
+    fixture.detectChanges();
+    let hexagonsAll = hostElement.querySelectorAll('.hexagon');
+    let hexCenterIconsAll = hostElement.querySelectorAll('.hex-center-icon');
 
-  //   expect(hexagonsAll.length).toEqual(hexCenterIconsAll.length);
-  // });
+    expect(hexagonsAll.length).toEqual(hexCenterIconsAll.length);
+    expect(hexagonsAll.length).toEqual(0);
+    expect(hexCenterIconsAll.length).toEqual(0);
 
-  // it('each center icon should have a number inside', () => {
-  //   const hexagonsAll = hostElement.querySelectorAll('.hexagon');
-  //   const hexCenterIconsAll = hostElement.querySelectorAll('.hex-center-icon');
-    
-  //   const values: Array<number> = [];
-  //   hostElement.querySelectorAll('.hex-center-icon').forEach((item) => {
-  //     const text: string = item.textContent ? item.textContent : '';
-  //     values.push(parseInt(text, 10));
-  //   });
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      hexagonsAll = hostElement.querySelectorAll('.hexagon');
+      hexCenterIconsAll = hostElement.querySelectorAll('.hex-center-icon');
+      
+      expect(hexagonsAll.length).toEqual(hexCenterIconsAll.length);
+      expect(hexagonsAll.length).toBeGreaterThan(0);
+      expect(hexCenterIconsAll.length).toBeGreaterThan(0);
+    });
+  }));
 
-  //   expect(values).not.toContain(NaN);
-  // });
+  it('each center icon should have a number inside', waitForAsync(() => {
+    fixture.detectChanges();
+    expect(hostElement.querySelector('.hex-center-icon')).toBeFalsy();
+
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const values: Array<number> = [];
+
+      hostElement.querySelectorAll('.hex-center-icon').forEach((item) => {
+        const text: string = item.textContent ? item.textContent : '';
+        values.push(parseInt(text, 10));
+      });
+      console.log(values);
+      expect(values).not.toContain(NaN);
+    });
+  }));
 });
 
 @Component({
