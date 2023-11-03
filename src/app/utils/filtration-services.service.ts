@@ -18,6 +18,15 @@ export class FiltrationServicesService {
     return Object.fromEntries(Object.entries(obj).filter(( [n, v] ) => v));
   }
 
+  async getCountriesList (): Promise<Array<string>> {
+    const res: any = await lastValueFrom( this.http.get('http://localhost:3010/countries-capacities') )
+    const countriesIsoCodes = res.res.data
+      .filter(item => parseFloat(item.wind_capacity) !== 0)
+      .map(item => item.country_code);
+
+    return countriesIsoCodes;
+  }
+
   async getUniqueTagsValues (): Promise<Selects> {
     const { res: tagsValues }: { res: Array<TagValue>} = await this.getTags();
     

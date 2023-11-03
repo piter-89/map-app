@@ -17,7 +17,9 @@ export class FiltrationComponent implements OnInit {
   public selectManufactures: Array<string> = [];
   public selectModel: Array<string> = [];
   public selectOperator: Array<string> = [];
+  public selectCountries: Array<string> = [];
   public filtrationForm: FormGroup = this.fb.group({
+    selectCountries: [''],
     selectManufacturer: [''],
     selectModel: [''],
     selectOperator: [''],
@@ -42,6 +44,7 @@ export class FiltrationComponent implements OnInit {
   async setFormData() {
     const tagsValues: Selects = await this.filtrationService.getUniqueTagsValues();
 
+    this.selectCountries = await this.filtrationService.getCountriesList();
     this.selectManufactures = tagsValues.manufactures;
     this.selectModel = tagsValues.model;
     this.selectOperator = tagsValues.operator;
