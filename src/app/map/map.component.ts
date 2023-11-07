@@ -126,6 +126,14 @@ export class MapComponent implements AfterViewInit {
     marker.on('mouseover', async (event) => {
       const popup: L.Popup = event.target.getPopup();
       const tags: Array<PoisTag> = await this.mapService.getPOIsTags(item.id);
+      
+      if(item && item.coordinates && item.coordinates.length === 3) {
+        tags.unshift({
+          name: 'Altitude',
+          value: `${item.coordinates[2]} m MSL`
+        });
+      }
+
       const newContent: string = tags.reduce((acc, value) => {
         return acc += `<strong>${value.name}</strong>: ${value.value}<br>`;
       }, '');

@@ -23,6 +23,8 @@ export class FiltrationComponent implements OnInit {
     selectManufacturer: [''],
     selectModel: [''],
     selectOperator: [''],
+    altitudeFrom: [''],
+    altitudeTo: [''],
     electricityOutputFrom: [''],
     electricityOutputTo: [''],
     heightFrom: [''],
