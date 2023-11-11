@@ -46,11 +46,11 @@ export class MapServiceService {
   }
 
   async getPOIsByHexagon(
-    hexIndex: string,
+    hexagonsIndexes: Array<string>,
     filtrationData: Filters
   ): Promise<Array<Poi>> {
-    const POIs: Array<Poi> = await this.postData('http://localhost:3010/poi', {
-      hexIndex,
+    const POIs: Array<Poi> = await this.postData('http://localhost:3010/pois-by-hexagons', {
+      hexagonsIndexes,
       filtrationData,
     });
 

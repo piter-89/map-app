@@ -97,8 +97,9 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  async drawPOIsByHexagon (hexIndex: string) {
-    const POIsNew: Array<Poi> = await this.mapService.getPOIsByHexagon(hexIndex, this.filtrationData);
+  async drawPOIsByHexagon (hexagonsIndexes: Array<string>) {
+    const POIsNew: Array<Poi> = await this.mapService.getPOIsByHexagon(hexagonsIndexes, this.filtrationData);
+    
     this.store.dispatch(addPOIs({ POIs: POIsNew}));
 
     const POIS: Array<Poi> = await lastValueFrom(this.store.select(selectPOIs).pipe(take(1)));
@@ -152,6 +153,10 @@ export class MapComponent implements AfterViewInit {
 
   async drawHexagons () {
     let { diagonalBoxPX, mapBounds, hexResolution } = this.mapService.getMapParams(this.mapContainer, this.zoomCurrent, this.MAP);
+
+    hexResolution = hexResolution < this.minH3Resolution ? this.minH3Resolution : hexResolution; // gdy oddala sie zoom to hexagony zostaja na minimalnej rozdzielczosci = 3
+    hexResolution = hexResolution > this.maxH3Resolution ? this.maxH3Resolution : hexResolution; // gdy przybliza sie zoom to hexagony zostaja na maksymalnej rozdzielczosci = 7
+    
 		const hexagonsNew: Array<Hexagon> = await this.mapService.getHexagons(hexResolution, diagonalBoxPX, mapBounds, this.filtrationData);
 
     // TUTAJ TO WSZYSTKO PRZEOBIC - ZMIANA HEXAGONOW W STORZE POWINNA BYC NA SUBSCRIEBE I TO CO PONIZEJ W FILTER POWINNO DZIAC SIE AUTOMATYCZNIE PO UPDATCIE W STORZE - TJ REACTYWNIE
@@ -161,15 +166,14 @@ export class MapComponent implements AfterViewInit {
 
     this.store.dispatch(removePOIs());
 
-    hexResolution = hexResolution < this.minH3Resolution ? this.minH3Resolution : hexResolution; // gdy oddala sie zoom to hexagony zostaja na minimalnej rozdzielczosci = 3
-    hexResolution = hexResolution > this.maxH3Resolution ? this.maxH3Resolution : hexResolution; // gdy przybliza sie zoom to hexagony zostaja na maksymalnej rozdzielczosci = 7
-
     const HEXAGONS: Array<Hexagon> = await this.mapService.getHexagonsFromStore();
+
+    const hexagonsIndexes: Array<string> = [];
     // console.log('HEXAGONS', HEXAGONS.length);
     
     HEXAGONS.filter( hex => hex.resolution === hexResolution).forEach( hex => {
       if (hex.pois_count === 1) {
-        this.drawPOIsByHexagon(hex.hex_index);
+        hexagonsIndexes.push(hex.hex_index);
       } else {
         const hexCenterIcon = L.divIcon({
           className: 'hex-center-icon',
@@ -183,6 +187,9 @@ export class MapComponent implements AfterViewInit {
         this.mapLayers.push(marker);
       }
     });
+
+    this.drawPOIsByHexagon(hexagonsIndexes);
+
     // console.log('HEXAGONS ADDED');
   };
 
