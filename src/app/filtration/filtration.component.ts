@@ -59,7 +59,10 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const drbar = new DualHRangeBar('slider-altitude');
+    const drbarAltitude = new DualHRangeBar('slider-altitude');
+    const drbarElectricityOutput = new DualHRangeBar('slider-electricity-output');
+    const drbarHeight = new DualHRangeBar('slider-height');
+    const drbarRotor = new DualHRangeBar('slider-rotor');
   }
 
   saveFilters() {

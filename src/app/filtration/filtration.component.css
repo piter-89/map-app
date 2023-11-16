@@ -1,3 +1,16 @@
+.group {
+  padding: 10px 10px 10px 10px;
+}
+
+/*
+// .group:nth-child(2n) {
+//   background: red;
+// }
+*/
+.group:nth-child(2n + 1) {
+  background: #f5f5f5;
+}
+
 .slider {
   width: 80%;
   position: relative;
