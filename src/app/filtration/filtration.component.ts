@@ -2,18 +2,20 @@ import {
   Component,
   EventEmitter,
   OnInit,
+  AfterViewInit,
   Output
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FiltrationServicesService } from '../utils/filtration-services.service';
 import { Filters, Selects } from '../shared/types/filtration';
+import { DualHRangeBar } from 'dual-range-bar';
 
 @Component({
   selector: 'app-filtration',
   templateUrl: './filtration.component.html',
   styleUrls: ['./filtration.component.scss'],
 })
-export class FiltrationComponent implements OnInit {
+export class FiltrationComponent implements OnInit, AfterViewInit {
   public selectManufactures: Array<string> = [];
   public selectModel: Array<string> = [];
   public selectOperator: Array<string> = [];
@@ -54,6 +56,10 @@ export class FiltrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.setFormData();
+  }
+
+  ngAfterViewInit(): void {
+    const drbar = new DualHRangeBar('slider-altitude');
   }
 
   saveFilters() {
