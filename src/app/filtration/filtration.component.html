@@ -5,6 +5,50 @@
     <button id="clear-form" (click)="clearFilters()" class="btn btn-outline-secondary" type="button">Clear</button>
   </div>
   
+  <div class="group input-group">
+    <label class="form-label">Altitude above sea level [m MSL]</label>
+    <div class="slider">
+      <div id="slider-altitude"></div>
+    </div>
+    <div class="input-group">
+      <input formControlName="altitudeFrom" id="altitudeFrom" [(ngModel)]="filtrationForm.value.altitudeFrom" type="text" class="form-control" placeholder="From">
+      <input formControlName="altitudeTo" id="altitudeTo" [(ngModel)]="filtrationForm.value.altitudeTo" type="text" class="form-control" placeholder="To">
+    </div>
+  </div>
+
+  <div class="group input-group">
+    <label class="form-label">Electricity output [KW]</label>
+    <div class="slider">
+      <div id="slider-electricity-output"></div>
+    </div>
+    <div class="input-group">
+      <input formControlName="electricityOutputFrom" id="electricityOutputFrom" [(ngModel)]="filtrationForm.value.electricityOutputFrom" type="text" class="form-control" placeholder="From">
+      <input formControlName="electricityOutputTo" id="electricityOutputTo" [(ngModel)]="filtrationForm.value.electricityOutputTo" type="text" class="form-control" placeholder="To">
+    </div>
+  </div>
+  
+  <div class="group">
+    <label class="form-label">Height [m]</label>
+    <div class="slider">
+      <div id="slider-height"></div>
+    </div>
+    <div class="input-group">
+      <input formControlName="heightFrom" id="heightFrom" [(ngModel)]="filtrationForm.value.heightFrom" type="text" class="form-control" placeholder="From">
+      <input formControlName="heightTo" id="heightTo" [(ngModel)]="filtrationForm.value.heightTo" type="text" class="form-control" placeholder="To">
+    </div>
+  </div>
+  
+  <div class="group">
+    <label class="form-label">Rotor diameter [m]</label>
+    <div class="slider">
+      <div id="slider-rotor"></div>
+    </div>
+    <div class="input-group">
+      <input formControlName="rotorDiameterFrom" id="rotorDiameterFrom" [(ngModel)]="filtrationForm.value.rotorDiameterFrom" type="text" class="form-control" placeholder="From">
+      <input formControlName="rotorDiameterTo" id="rotorDiameterTo" [(ngModel)]="filtrationForm.value.rotorDiameterTo" type="text" class="form-control" placeholder="To">
+    </div>
+  </div>
+  
   <div class="group">
     <label class="form-label">Country</label>
     <select formControlName="selectCountries" id="selectCountries" class="form-select" aria-label="Default select example">
@@ -36,62 +80,19 @@
       <option *ngFor="let item of selectOperator">{{item}}</option>
     </select>
   </div>
-  
-  <div class="group input-group">
-    <label class="form-label">Altitude above sea level (m MSL)</label>
-    <div class="slider">
-      <div id="slider-altitude"></div>
-    </div>
-    <div class="input-group">
-      <input formControlName="altitudeFrom" id="altitudeFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="altitudeTo" id="altitudeTo" type="text" class="form-control" placeholder="To">
-    </div>
-  </div>
 
-  <div class="group input-group">
-    <label class="form-label">Electricity output</label>
-    <div class="slider">
-      <div id="slider-electricity-output"></div>
-    </div>
-    <div class="input-group">
-      <input formControlName="electricityOutputFrom" id="electricityOutputFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="electricityOutputTo" id="electricityOutputTo" type="text" class="form-control" placeholder="To">
-    </div>
-  </div>
-  
   <div class="group">
-    <label class="form-label">Height</label>
-    <div class="slider">
-      <div id="slider-height"></div>
-    </div>
+    <label class="form-label">Build date</label>
     <div class="input-group">
-      <input formControlName="heightFrom" id="heightFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="heightTo" id="heightTo" type="text" class="form-control" placeholder="To">
+      <select formControlName="startDateFrom" id="startDateFrom" class="form-select" aria-label="Default select example">
+        <option></option>
+        <option *ngFor="let item of selectYears">{{item}}</option>
+      </select>
+      <select formControlName="startDateTo" id="startDateTo" class="form-select" aria-label="Default select example">
+        <option></option>
+        <option *ngFor="let item of selectYears">{{item}}</option>
+      </select>
     </div>
-  </div>
-  
-  <div class="group">
-    <label class="form-label">Rotor diameter</label>
-    <div class="slider">
-      <div id="slider-rotor"></div>
-    </div>
-    <div class="input-group">
-      <input formControlName="rotorDiameterFrom" id="rotorDiameterFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="rotorDiameterTo" id="rotorDiameterTo" type="text" class="form-control" placeholder="To">
-    </div>
-  </div>
-  
-  <div class="group">
-    <label class="form-label">Start date</label>
-    <div class="input-group">
-      <input formControlName="startDateFrom" id="startDateFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="startDateTo" id="startDateTo" type="text" class="form-control" placeholder="To">
-    </div>
-  </div>
-  
-  <div class="group">
-    <label class="form-label">Description</label>
-    <input id="description" type="text" class="form-control" placeholder="Type text you are looking for">
   </div>
   
 </form>

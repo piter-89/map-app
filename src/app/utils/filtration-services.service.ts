@@ -40,4 +40,17 @@ export class FiltrationServicesService {
       operator
     }
   }
+
+  generateYears (startYear: number): Array<number> {
+    let year = startYear;
+    const arr: Array<number> = [];
+    const currentyear = (new Date).getFullYear();
+
+    do {
+        arr.push(year);
+        year++;
+    } while(year <= currentyear)
+
+    return arr;
+  }
 }
