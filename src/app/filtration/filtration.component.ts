@@ -38,6 +38,19 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
     startDateTo: [''],
   });
 
+  private scrollUpdateTimeout: any;
+  private drbars: any = {};
+  private drbarBounds = {
+    altitudeFrom: 0,
+    altitudeTo: 2000,
+    electricityOutputFrom: 0,
+    electricityOutputTo: 5000,
+    heightFrom: 0,
+    heightTo: 300,
+    rotorDiameterFrom: 0,
+    rotorDiameterTo: 200,
+  }
+
   @Output() submitFormEv = new EventEmitter<Filters>();
 
   constructor(
@@ -60,64 +73,90 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const drbarAltitude = new DualHRangeBar('slider-altitude', {
-      lowerBound: 0,
-      upperBound: 2000,
+    this.drbars['altitude'] = new DualHRangeBar('slider-altitude', {
+      lowerBound: this.drbarBounds.altitudeFrom,
+      upperBound: this.drbarBounds.altitudeTo,
       minSpan: 200,
       rangeColor: '#6ab187',
       sliderColor: '#295a55',
       sliderActiveColor: '#295a55'
     });
 
-    drbarAltitude.addEventListener('update', (e: any) => {
+    this.drbars['altitude'].addEventListener('update', (e: any) => {
       this.filtrationForm.value.altitudeFrom = parseInt(e.detail.lower);
       this.filtrationForm.value.altitudeTo = parseInt(e.detail.upper);
+      console.log('elo updated!');
     });
 
     setTimeout(() => {
-      drbarAltitude.lower = 1000;
-    }, 2000);
-
-    const drbarElectricityOutput = new DualHRangeBar('slider-electricity-output', {
-      lowerBound: 0,
-      upperBound: 5000,
+      this.drbars['altitude'].lower = 1000;
+    }, 4000);
+    
+    this.drbars['electricityOutput'] = new DualHRangeBar('slider-electricity-output', {
+      lowerBound: this.drbarBounds.electricityOutputFrom,
+      upperBound: this.drbarBounds.electricityOutputTo,
       minSpan: 500,
       rangeColor: '#6ab187',
       sliderColor: '#295a55',
       sliderActiveColor: '#295a55'
     });
 
-    drbarElectricityOutput.addEventListener('update', (e: any) => {
+    this.drbars['electricityOutput'].addEventListener('update', (e: any) => {
       this.filtrationForm.value.electricityOutputFrom = parseInt(e.detail.lower);
       this.filtrationForm.value.electricityOutputTo = parseInt(e.detail.upper);
     });
 
-    const drbarHeight = new DualHRangeBar('slider-height', {
-      lowerBound: 0,
-      upperBound: 300,
+    this.drbars['height'] = new DualHRangeBar('slider-height', {
+      lowerBound: this.drbarBounds.heightFrom,
+      upperBound: this.drbarBounds.heightTo,
       minSpan: 30,
       rangeColor: '#6ab187',
       sliderColor: '#295a55',
       sliderActiveColor: '#295a55'
     });
 
-    drbarHeight.addEventListener('update', (e: any) => {
+    this.drbars['height'].addEventListener('update', (e: any) => {
       this.filtrationForm.value.heightFrom = parseInt(e.detail.lower);
       this.filtrationForm.value.heightTo = parseInt(e.detail.upper);
     });
 
-    const drbarRotor = new DualHRangeBar('slider-rotor', {
-      lowerBound: 0,
-      upperBound: 200,
+    this.drbars['rotor'] = new DualHRangeBar('slider-rotor', {
+      lowerBound: this.drbarBounds.rotorDiameterFrom,
+      upperBound: this.drbarBounds.rotorDiameterTo,
       minSpan: 20,
       rangeColor: '#6ab187',
       sliderColor: '#295a55',
       sliderActiveColor: '#295a55'
     });
 
-    drbarRotor.addEventListener('update', (e: any) => {
+    this.drbars['rotor'].addEventListener('update', (e: any) => {
       this.filtrationForm.value.rotorDiameterFrom = parseInt(e.detail.lower);
       this.filtrationForm.value.rotorDiameterTo = parseInt(e.detail.upper);
+    });
+
+    this.formVariablesWatcher();
+  }
+
+  formVariablesWatcher () {
+    this.filtrationForm.valueChanges.subscribe((fields) => {
+      clearTimeout(this.scrollUpdateTimeout);
+      
+      this.scrollUpdateTimeout = setTimeout(() => {
+        Object.keys(fields).filter(key => fields[key]).forEach(key => {
+          if(key.indexOf('From') !== -1) {
+            const keyPure = key.replace('From', '');
+            this.drbars[keyPure].lower = fields[key] >= this.drbarBounds[key] ? fields[key] : this.drbarBounds[key];
+          }
+
+          if(key.indexOf('To') !== -1) {
+            const keyPure = key.replace('To', '');
+            this.drbars[keyPure].upper = fields[key] <= this.drbarBounds[key] ? fields[key] : this.drbarBounds[key];
+          }
+          
+          console.log(key)
+          console.log(fields[key])
+        });
+      }, 1000);
     });
   }
 
