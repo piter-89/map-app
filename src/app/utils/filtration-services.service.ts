@@ -53,4 +53,17 @@ export class FiltrationServicesService {
 
     return arr;
   }
+
+  detectFieldChange (fields, oldFields) {
+    return Object.keys(fields).reduce((acc: Array<any>, key) => {
+      if(fields[key] !== oldFields[key]) {
+        const keyPure = key.replace('From', '').replace('To', '');
+        acc.push({
+          key,
+          keyPure
+        });
+      }
+     return acc;
+ }, []);
+  }
 }

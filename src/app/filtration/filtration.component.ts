@@ -81,6 +81,8 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.formOldState = this.filtrationForm.value;
+
     this.drbars['altitude'] = new DualHRangeBar('slider-altitude', {
       lowerBound: this.drbarBounds.altitudeFrom,
       upperBound: this.drbarBounds.altitudeTo,
@@ -149,32 +151,42 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
     this.drbarLoaders[name] = true;
   }
 
-  private setDrbarinactive (name) {
+  private setDrbarInactive (name) {
     this.drbarLoaders[name] = false;
+  }
+
+  private setAllDrbarInactive () {
+    Object.keys(this.drbarLoaders).forEach(key => {
+      this.drbarLoaders[key] = false;
+    });
   }
 
   formVariablesWatcher () {
     this.filtrationForm.valueChanges.subscribe((fields) => {
       clearTimeout(this.scrollUpdateTimeout);
-      this.formOldState = fields;
+
+      const changedFields = this.filtrationService.detectFieldChange(fields, this.formOldState);
+
+      changedFields.forEach(field => {
+        this.setDrbarActive(field.keyPure);
+      });
 
       this.scrollUpdateTimeout = setTimeout(() => {
-        Object.keys(fields).filter(key => fields[key]).forEach(key => {
-          // porownac tutaj zmienne formOldState aby wiedziec ktora zmienna sie zmienila z formualrza
-          if(key.indexOf('From') !== -1) {
-            const keyPure = key.replace('From', '');
-            this.drbars[keyPure].lower = fields[key] >= this.drbarBounds[key] ? fields[key] : this.drbarBounds[key];
+        console.log('heellloooo');
+        changedFields.forEach(field => {
+          this.setAllDrbarInactive();
+
+          if(field.key.indexOf('From') !== -1) {
+            this.drbars[field.yPure].lower = fields[field.key] >= this.drbarBounds[field.key] ? fields[field.key] : this.drbarBounds[field.key];
           }
 
-          if(key.indexOf('To') !== -1) {
-            const keyPure = key.replace('To', '');
-            this.drbars[keyPure].upper = fields[key] <= this.drbarBounds[key] ? fields[key] : this.drbarBounds[key];
+          if(field.key.indexOf('To') !== -1) {
+            this.drbars[field.keyPure].upper = fields[field.key] <= this.drbarBounds[field.key] ? fields[field.key] : this.drbarBounds[field.key];
           }
-          
-          console.log(key)
-          console.log(fields[key])
         });
-      }, 1000);
+      }, 500);
+
+      this.formOldState = JSON.parse(JSON.stringify(fields));
     });
   }
 
