@@ -21,6 +21,7 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
   public selectOperator: Array<string> = [];
   public selectCountries: Array<string> = [];
   public selectYears: Array<number> = [];
+  public loaderActive = false;
   public filtrationForm: FormGroup = this.fb.group({
     selectCountries: [''],
     selectManufacturer: [''],
@@ -37,7 +38,14 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
     startDateFrom: [''],
     startDateTo: [''],
   });
+  public drbarLoaders = {
+    altitude: false,
+    electricityOutput: false,
+    height: false,
+    rotorDiameter: false
+  }
 
+  private formOldState = {};
   private scrollUpdateTimeout: any;
   private drbars: any = {};
   private drbarBounds = {
@@ -50,7 +58,7 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
     rotorDiameterFrom: 0,
     rotorDiameterTo: 200,
   }
-
+  
   @Output() submitFormEv = new EventEmitter<Filters>();
 
   constructor(
@@ -137,12 +145,22 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
     this.formVariablesWatcher();
   }
 
+  private setDrbarActive (name) {
+    this.drbarLoaders[name] = true;
+  }
+
+  private setDrbarinactive (name) {
+    this.drbarLoaders[name] = false;
+  }
+
   formVariablesWatcher () {
     this.filtrationForm.valueChanges.subscribe((fields) => {
       clearTimeout(this.scrollUpdateTimeout);
-      
+      this.formOldState = fields;
+
       this.scrollUpdateTimeout = setTimeout(() => {
         Object.keys(fields).filter(key => fields[key]).forEach(key => {
+          // porownac tutaj zmienne formOldState aby wiedziec ktora zmienna sie zmienila z formualrza
           if(key.indexOf('From') !== -1) {
             const keyPure = key.replace('From', '');
             this.drbars[keyPure].lower = fields[key] >= this.drbarBounds[key] ? fields[key] : this.drbarBounds[key];

@@ -11,13 +11,15 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { FiltrationComponent } from './filtration/filtration.component';
 import { TestcompComponent } from './testcomp/testcomp.component';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
     FiltrationComponent,
-    TestcompComponent
+    TestcompComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
