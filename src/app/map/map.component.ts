@@ -19,6 +19,8 @@ import { v4 as uuid } from 'uuid';
 export class MapComponent implements AfterViewInit {
   @ViewChild('mapRef') mapContainer: ElementRef;
 
+  public loading = false;
+
   private MAP: L.Map;
   private mapLayers: Array<L.Layer> = [];
   private layersUnderDrawing: Array<number> = [];
@@ -50,6 +52,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   setFiltrationData (data: Filters) {
+    this.loading = true;
     this.filtrationData = data;
     this.drawElements();
   }
@@ -91,6 +94,8 @@ export class MapComponent implements AfterViewInit {
 
     const POIS: Array<Poi> = await lastValueFrom(this.store.select(selectPOIs).pipe(take(1)));
 
+    this.loading = false;
+    
     POIS.forEach( poi => {
       const marker = this.drawPOI(poi);
       this.mapLayers.push(marker);
@@ -189,6 +194,7 @@ export class MapComponent implements AfterViewInit {
     });
 
     this.drawPOIsByHexagon(hexagonsIndexes);
+    this.loading = false;
 
     // console.log('HEXAGONS ADDED');
   };

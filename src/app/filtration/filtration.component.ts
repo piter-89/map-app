@@ -3,7 +3,8 @@ import {
   EventEmitter,
   OnInit,
   AfterViewInit,
-  Output
+  Output,
+  Input
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FiltrationServicesService } from '../utils/filtration-services.service';
@@ -16,12 +17,13 @@ import { DualHRangeBar } from 'dual-range-bar';
   styleUrls: ['./filtration.component.scss'],
 })
 export class FiltrationComponent implements OnInit, AfterViewInit {
+  @Input('loading') loading = false;
+
   public selectManufactures: Array<string> = [];
   public selectModel: Array<string> = [];
   public selectOperator: Array<string> = [];
   public selectCountries: Array<string> = [];
   public selectYears: Array<number> = [];
-  public loaderActive = false;
   public filtrationForm: FormGroup = this.fb.group({
     selectCountries: [''],
     selectManufacturer: [''],

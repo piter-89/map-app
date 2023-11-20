@@ -3,7 +3,7 @@
   <div class="input-group mb-3">
     <button id="send-form" (click)="saveFilters()" class="btn btn-success" type="button">Search</button>
     <button id="clear-form" (click)="clearFilters()" class="btn btn-outline-secondary" type="button">Clear</button>
-    <app-loader [active]="loaderActive" [size]="40"></app-loader>
+    <app-loader [active]="loading" [size]="40"></app-loader>
   </div>
   
   <div class="group input-group">

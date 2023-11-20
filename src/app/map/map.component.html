@@ -2,7 +2,7 @@
   <div class="map-frame">
     <div #mapRef id="map"></div>
     <div class="sidebar">
-      <app-filtration (submitFormEv)="setFiltrationData($event)"></app-filtration>
+      <app-filtration (submitFormEv)="setFiltrationData($event)" [loading]="loading"></app-filtration>
     </div>
     <app-testcomp></app-testcomp>
   </div>
