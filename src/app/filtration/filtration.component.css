@@ -1,18 +1,59 @@
 .group {
-  padding: 10px 10px 10px 10px;
-}
-
-/*
-// .group:nth-child(2n) {
-//   background: red;
-// }
-*/
-.group:nth-child(2n + 1) {
-  background: #f5f5f5;
+  padding: 5px 10px 10px 10px;
+  border-bottom: 1px solid #c8e9d8;
 }
 
 .slider {
-  width: 80%;
+  width: calc(100% - 20px);
   position: relative;
-  margin: 10px auto 20px auto !important;
+  margin: 5px 0px 18px 10px !important;
+}
+
+.light-label {
+  color: #55b681;
+}
+
+.filter-input {
+  padding: 0.175rem 0.75rem;
+}
+
+.filter-input:focus {
+  border-color: #bce6cf;
+  box-shadow: 0 0 2px 0.25rem rgba(63, 182, 117, 0.25);
+}
+
+.filter-select {
+  padding: 0.175rem 2.25rem 0.1375rem 0.75rem;
+}
+
+.filter-btn-group {
+  width: 100%;
+  padding-bottom: 20px;
+  position: sticky;
+  z-index: 100;
+  top: 0;
+  right: 0;
+}
+
+.filter-btn-group .btn-success {
+  background: #035c2a;
+}
+
+.filter-btn-group .btn-outline-secondary {
+  background: #f4f5f7;
+}
+
+.filter-btn-group .btn-outline-secondary:hover {
+  color: #000;
+}
+
+.filter-btn-group .btn {
+  border-radius: 0;
+}
+
+.main-loader {
+  position: fixed;
+  right: 320px;
+  display: inline-block;
+  z-index: 10000;
 }

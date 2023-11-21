@@ -9,10 +9,11 @@
   top: 0;
   right: 0;
   z-index: 99999;
-  background: #fff;
+  background: #ddeee4;
+  color: #223151;
   box-shadow: 0 0 5px #000;
   height: 100vh;
-  padding: 50px 0px 10px 0px;
+  padding: 0px 0px 10px 0px;
   overflow: auto;
 }
 

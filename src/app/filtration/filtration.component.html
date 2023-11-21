@@ -1,62 +1,62 @@
 <form [formGroup]="filtrationForm" id="filtration-form">
 	
-  <div class="input-group mb-3">
+  <div class="btn-group filter-btn-group">
     <button id="send-form" (click)="saveFilters()" class="btn btn-success" type="button">Search</button>
     <button id="clear-form" (click)="clearFilters()" class="btn btn-outline-secondary" type="button">Clear</button>
-    <app-loader [active]="loading" [size]="40"></app-loader>
   </div>
+  <app-loader [active]="loading" [size]="40" class="main-loader"></app-loader>
   
   <div class="group input-group">
-    <label class="form-label">Altitude above sea level [m MSL]</label>
+    <label class="form-label">Altitude above sea level <span class="light-label">[m MSL]</span></label>
     <app-loader [active]="drbarLoaders.altitude" [size]="20"></app-loader>
     <div class="slider">
       <div id="slider-altitude"></div>
     </div>
     <div class="input-group">
-      <input formControlName="altitudeFrom" id="altitudeFrom" [(ngModel)]="filtrationForm.value.altitudeFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="altitudeTo" id="altitudeTo" [(ngModel)]="filtrationForm.value.altitudeTo" type="text" class="form-control" placeholder="To">
+      <input formControlName="altitudeFrom" id="altitudeFrom" [(ngModel)]="filtrationForm.value.altitudeFrom" type="text" class="form-control filter-input" placeholder="From">
+      <input formControlName="altitudeTo" id="altitudeTo" [(ngModel)]="filtrationForm.value.altitudeTo" type="text" class="form-control filter-input" placeholder="To">
     </div>
   </div>
 
   <div class="group input-group">
-    <label class="form-label">Electricity output [KW]</label>
+    <label class="form-label">Electricity output <span class="light-label">[KW]</span></label>
     <app-loader [active]="drbarLoaders.electricityOutput" [size]="20"></app-loader>
     <div class="slider">
       <div id="slider-electricity-output"></div>
     </div>
     <div class="input-group">
-      <input formControlName="electricityOutputFrom" id="electricityOutputFrom" [(ngModel)]="filtrationForm.value.electricityOutputFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="electricityOutputTo" id="electricityOutputTo" [(ngModel)]="filtrationForm.value.electricityOutputTo" type="text" class="form-control" placeholder="To">
+      <input formControlName="electricityOutputFrom" id="electricityOutputFrom" [(ngModel)]="filtrationForm.value.electricityOutputFrom" type="text" class="form-control filter-input" placeholder="From">
+      <input formControlName="electricityOutputTo" id="electricityOutputTo" [(ngModel)]="filtrationForm.value.electricityOutputTo" type="text" class="form-control filter-input" placeholder="To">
     </div>
   </div>
   
   <div class="group input-group">
-    <label class="form-label">Height [m]</label>
+    <label class="form-label">Height <span class="light-label">[m]</span></label>
     <app-loader [active]="drbarLoaders.height" [size]="20"></app-loader>
     <div class="slider">
       <div id="slider-height"></div>
     </div>
     <div class="input-group">
-      <input formControlName="heightFrom" id="heightFrom" [(ngModel)]="filtrationForm.value.heightFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="heightTo" id="heightTo" [(ngModel)]="filtrationForm.value.heightTo" type="text" class="form-control" placeholder="To">
+      <input formControlName="heightFrom" id="heightFrom" [(ngModel)]="filtrationForm.value.heightFrom" type="text" class="form-control filter-input" placeholder="From">
+      <input formControlName="heightTo" id="heightTo" [(ngModel)]="filtrationForm.value.heightTo" type="text" class="form-control filter-input" placeholder="To">
     </div>
   </div>
   
   <div class="group input-group">
-    <label class="form-label">Rotor diameter [m]</label>
+    <label class="form-label">Rotor diameter <span class="light-label">[m]</span></label>
     <app-loader [active]="drbarLoaders.rotorDiameter" [size]="20"></app-loader>
     <div class="slider">
       <div id="slider-rotor"></div>
     </div>
     <div class="input-group">
-      <input formControlName="rotorDiameterFrom" id="rotorDiameterFrom" [(ngModel)]="filtrationForm.value.rotorDiameterFrom" type="text" class="form-control" placeholder="From">
-      <input formControlName="rotorDiameterTo" id="rotorDiameterTo" [(ngModel)]="filtrationForm.value.rotorDiameterTo" type="text" class="form-control" placeholder="To">
+      <input formControlName="rotorDiameterFrom" id="rotorDiameterFrom" [(ngModel)]="filtrationForm.value.rotorDiameterFrom" type="text" class="form-control filter-input" placeholder="From">
+      <input formControlName="rotorDiameterTo" id="rotorDiameterTo" [(ngModel)]="filtrationForm.value.rotorDiameterTo" type="text" class="form-control filter-input" placeholder="To">
     </div>
   </div>
   
   <div class="group">
     <label class="form-label">Country</label>
-    <select formControlName="selectCountries" id="selectCountries" class="form-select" aria-label="Default select example">
+    <select formControlName="selectCountries" id="selectCountries" class="form-select filter-select" aria-label="Default select example">
       <option></option>
       <option *ngFor="let item of selectCountries">{{item}}</option>
     </select>
@@ -64,7 +64,7 @@
 
   <div class="group">
     <label class="form-label">Manufacturer</label>
-    <select formControlName="selectManufacturer" id="selectManufacturer" class="form-select" aria-label="Default select example">
+    <select formControlName="selectManufacturer" id="selectManufacturer" class="form-select filter-select" aria-label="Default select example">
       <option></option>
       <option *ngFor="let item of selectManufactures">{{item}}</option>
     </select>
@@ -72,7 +72,7 @@
   
   <div class="group">
     <label class="form-label">Model</label>
-    <select formControlName="selectModel" id="selectModel" class="form-select" aria-label="Default select example">
+    <select formControlName="selectModel" id="selectModel" class="form-select filter-select" aria-label="Default select example">
       <option></option>
       <option *ngFor="let item of selectModel">{{item}}</option>
     </select>
@@ -80,7 +80,7 @@
   
   <div class="group">
     <label class="form-label">Operator</label>
-    <select formControlName="selectOperator" id="selectOperator" class="form-select" aria-label="Default select example">
+    <select formControlName="selectOperator" id="selectOperator" class="form-select filter-select" aria-label="Default select example">
       <option></option>
       <option *ngFor="let item of selectOperator">{{item}}</option>
     </select>
@@ -89,11 +89,11 @@
   <div class="group">
     <label class="form-label">Build date</label>
     <div class="input-group">
-      <select formControlName="startDateFrom" id="startDateFrom" class="form-select" aria-label="Default select example">
+      <select formControlName="startDateFrom" id="startDateFrom" class="form-select filter-select" aria-label="Default select example">
         <option></option>
         <option *ngFor="let item of selectYears">{{item}}</option>
       </select>
-      <select formControlName="startDateTo" id="startDateTo" class="form-select" aria-label="Default select example">
+      <select formControlName="startDateTo" id="startDateTo" class="form-select filter-select" aria-label="Default select example">
         <option></option>
         <option *ngFor="let item of selectYears">{{item}}</option>
       </select>

@@ -89,9 +89,10 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
       lowerBound: this.drbarBounds.altitudeFrom,
       upperBound: this.drbarBounds.altitudeTo,
       minSpan: 200,
-      rangeColor: '#6ab187',
-      sliderColor: '#295a55',
-      sliderActiveColor: '#295a55'
+      rangeColor: '#3fb675',
+      sliderColor: '#035c2a',
+      sliderActiveColor: '#035c2a',
+      bgColor: '#bce6cf'
     });
 
     this.drbars['altitude'].addEventListener('update', (e: any) => {
@@ -99,18 +100,15 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
       this.filtrationForm.value.altitudeTo = parseInt(e.detail.upper);
       console.log('elo updated!');
     });
-
-    setTimeout(() => {
-      this.drbars['altitude'].lower = 1000;
-    }, 4000);
     
     this.drbars['electricityOutput'] = new DualHRangeBar('slider-electricity-output', {
       lowerBound: this.drbarBounds.electricityOutputFrom,
       upperBound: this.drbarBounds.electricityOutputTo,
       minSpan: 500,
-      rangeColor: '#6ab187',
-      sliderColor: '#295a55',
-      sliderActiveColor: '#295a55'
+      rangeColor: '#3fb675',
+      sliderColor: '#035c2a',
+      sliderActiveColor: '#035c2a',
+      bgColor: '#bce6cf'
     });
 
     this.drbars['electricityOutput'].addEventListener('update', (e: any) => {
@@ -122,9 +120,10 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
       lowerBound: this.drbarBounds.heightFrom,
       upperBound: this.drbarBounds.heightTo,
       minSpan: 30,
-      rangeColor: '#6ab187',
-      sliderColor: '#295a55',
-      sliderActiveColor: '#295a55'
+      rangeColor: '#3fb675',
+      sliderColor: '#035c2a',
+      sliderActiveColor: '#035c2a',
+      bgColor: '#bce6cf'
     });
 
     this.drbars['height'].addEventListener('update', (e: any) => {
@@ -136,9 +135,10 @@ export class FiltrationComponent implements OnInit, AfterViewInit {
       lowerBound: this.drbarBounds.rotorDiameterFrom,
       upperBound: this.drbarBounds.rotorDiameterTo,
       minSpan: 20,
-      rangeColor: '#6ab187',
-      sliderColor: '#295a55',
-      sliderActiveColor: '#295a55'
+      rangeColor: '#3fb675',
+      sliderColor: '#035c2a',
+      sliderActiveColor: '#035c2a',
+      bgColor: '#bce6cf'
     });
 
     this.drbars['rotor'].addEventListener('update', (e: any) => {
