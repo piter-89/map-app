@@ -12,6 +12,7 @@
   margin-top: -20px !important;
   font-size: 14px;
 }
+
 .hex-center-icon span {
   font-weight: bold;
   position: absolute;
@@ -19,18 +20,22 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
   background: #ddeee4 !important;
-  background: linear-gradient(0deg, rgba(2,93,43,1) 0%, rgba(2,93,43,1) 10%, rgba(69,193,120,1) 100%) !important;
-  color: #fff !important; /* #1b274c */
+  background: linear-gradient(0deg, #025d2b 0%, #025d2b 10%, #45c178 100%) !important;
+  color: #fff !important;
+  /* #1b274c */
   font-family: var(--bs-body-font-family);
   font-size: 13px;
   opacity: 0.9;
 }
+
 .leaflet-popup-row {
   margin-bottom: 4px;
 }
+
 .leaflet-popup-row.footer {
   font-size: 10px !important;
   text-align: right;

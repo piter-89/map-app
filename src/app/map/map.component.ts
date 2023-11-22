@@ -136,13 +136,15 @@ export class MapComponent implements AfterViewInit {
       if(item && item.coordinates && item.coordinates.length === 3) {
         tags.unshift({
           name: 'Altitude',
-          value: `${item.coordinates[2]} m MSL`
+          value: `${item.coordinates[2]} [m MSL]`
         });
       }
 
-      const newContent: string = tags.reduce((acc, value) => {
-        return acc += `<strong>${value.name}</strong>: ${value.value}<br>`;
+      let newContent: string = tags.reduce((acc, value) => {
+        return acc += `<div class="leaflet-popup-row"><strong>${value.name}</strong>: ${value.value}</div>`;
       }, '');
+
+      newContent += '<div class="leaflet-popup-row footer"><small>Data source: OpenStreetMap</small></div>'
       
       popup.setContent(newContent);
       popup.update();
@@ -185,10 +187,12 @@ export class MapComponent implements AfterViewInit {
           html: '<span>' + hex.pois_count + '</span>'
         });
         
-        const polygon: any = L.polygon(hex.nodes, { className: 'hexagon' }).addTo(this.MAP);
+        console.log('circleCenter ', hex.centertxt);
+        //const polygon: any = L.polygon(hex.nodes, { color: '#55b681', className: 'hexagon' }).addTo(this.MAP);
+        const circle: any = L.circle(hex.centertxt, { stroke: false, radius: 50000, color: '#55b681' }).addTo(this.MAP);
         const marker = L.marker(hex.centertxt, { icon: hexCenterIcon }).addTo(this.MAP);
         
-        this.mapLayers.push(polygon);
+        this.mapLayers.push(circle);
         this.mapLayers.push(marker);
       }
     });
