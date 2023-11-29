@@ -6,11 +6,11 @@
   box-shadow: 0 0 5px #000;
   color: #fff;
   border-radius: 50%;
-  width: 40px !important;
-  height: 40px !important;
-  margin-left: -20px !important;
-  margin-top: -20px !important;
-  font-size: 14px;
+  width: 36px !important;
+  height: 36px !important;
+  margin-left: -18px !important;
+  margin-top: -18px !important;
+  font-size: 12px;
 }
 
 .hex-center-icon span {

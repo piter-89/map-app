@@ -176,7 +176,7 @@ export class MapComponent implements AfterViewInit {
     const HEXAGONS: Array<Hexagon> = await this.mapService.getHexagonsFromStore();
 
     const hexagonsIndexes: Array<string> = [];
-    // console.log('HEXAGONS', HEXAGONS.length);
+    console.log('hexResolution: ', hexResolution);
     
     HEXAGONS.filter( hex => hex.resolution === hexResolution).forEach( hex => {
       if (hex.pois_count === 1) {
@@ -187,9 +187,10 @@ export class MapComponent implements AfterViewInit {
           html: '<span>' + hex.pois_count + '</span>'
         });
         
-        console.log('circleCenter ', hex.centertxt);
         //const polygon: any = L.polygon(hex.nodes, { color: '#55b681', className: 'hexagon' }).addTo(this.MAP);
-        const circle: any = L.circle(hex.centertxt, { stroke: false, radius: 50000, color: '#55b681' }).addTo(this.MAP);
+        const radius = this.mapService.calcHeatMapCircleRadius(hexResolution, this.minH3Resolution);
+        console.log('radius ', radius);
+        const circle: any = L.circle(hex.centertxt, { stroke: false, radius: radius, color: '#55b681' }).addTo(this.MAP);
         const marker = L.marker(hex.centertxt, { icon: hexCenterIcon }).addTo(this.MAP);
         
         this.mapLayers.push(circle);

@@ -113,4 +113,16 @@ export class MapServiceService {
 
     return diagonalBoxPX;
   }
+
+  calcHeatMapCircleRadius (resolution: number, resMin: number): number {
+    const counter = resolution - resMin + 1;
+    const initValue = 100000;
+    let value = initValue;
+
+    for(let i = 0; i < counter; i++) {
+      value = value * 0.44;
+    }
+    
+    return value;
+  }
 }
