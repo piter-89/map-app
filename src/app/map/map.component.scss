@@ -2,6 +2,9 @@
   height: 100vh;
   width: calc(100% - 320px);
 }
+.sidebar-mobile-control {
+  display: none;
+}
 .sidebar {
   width: 320px;
   position: fixed;
@@ -22,4 +25,41 @@
   width: 100%;
   top: 0;
   padding-top: 5px;
+}
+
+@media screen and (max-width: 767px) {
+  #map {
+    width: 100%;
+  }
+  .sidebar {
+    display: none;
+    padding-bottom: 50px;
+
+    &.active {
+      display: block;
+    }
+  }
+  .sidebar-mobile-control {
+    display: block;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    background: #55b681;
+    text-align: center;
+    padding: 5px 0;
+    z-index: 1000000;
+
+    button {
+      border: none;
+      text-transform: uppercase;
+      color: #fff;
+      background: #035c2a;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-weight: 500;
+    }
+  }
 }

@@ -20,6 +20,8 @@ export class MapComponent implements AfterViewInit {
   @ViewChild('mapRef') mapContainer: ElementRef;
 
   public loading = false;
+  public mobileShowSidebar = false;
+  public mobileShowSidebarButtonTxt = 'Show';
 
   private MAP: L.Map;
   private mapLayers: Array<L.Layer> = [];
@@ -203,5 +205,10 @@ export class MapComponent implements AfterViewInit {
 
     // console.log('HEXAGONS ADDED');
   };
+
+  toggleSidebar () {
+    this.mobileShowSidebar = !this.mobileShowSidebar;
+    this.mobileShowSidebarButtonTxt = this.mobileShowSidebar ? 'Hide' : 'Show';
+  }
 
 }

@@ -1,7 +1,10 @@
 <div class="map-container">
   <div class="map-frame">
     <div #mapRef id="map"></div>
-    <div class="sidebar">
+    <div class="sidebar-mobile-control">
+      <button (click)="toggleSidebar()">{{ mobileShowSidebarButtonTxt }} filtration</button>
+    </div>
+    <div class="sidebar" [class.active]="mobileShowSidebar">
       <app-filtration (submitFormEv)="setFiltrationData($event)" [loading]="loading"></app-filtration>
     </div>
   </div>
